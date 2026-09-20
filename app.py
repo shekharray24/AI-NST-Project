@@ -31,15 +31,37 @@ class UploadForm(FlaskForm):
     alpha = FloatField('Alpha', default=1.0)
     submit = SubmitField('Transfer Style')
 
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# encoder = VGGEncoder('vgg_normalised.pth').to(device)
+# decoder = Decoder().to(device)
+# decoder.load_state_dict(
+#     torch.load(
+#         r'C:\Users\DELL\Desktop\AI-NST-Project\experiment\final_exp\decoder_final.pth',
+#         map_location='cpu'
+#     )
+# )
+
+# encoder.eval()
+# decoder.eval()
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-encoder = VGGEncoder('vgg_normalised.pth').to(device)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+VGG_PATH = os.path.join(BASE_DIR, "vgg_normalised.pth")
+DECODER_PATH = os.path.join(
+    BASE_DIR,
+    "experiment",
+    "final_exp",
+    "decoder_final.pth"
+)
+
+encoder = VGGEncoder(VGG_PATH).to(device)
 decoder = Decoder().to(device)
+
 decoder.load_state_dict(
-    torch.load(
-        r'C:\Users\DELL\Desktop\AI-NST-Project\experiment\final_exp\decoder_final.pth',
-        map_location='cpu'
-    )
+    torch.load(DECODER_PATH, map_location=device)
 )
 
 encoder.eval()
